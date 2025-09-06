@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Ebon Covenant</title>
+    <style>
+        body { 
+            background-color: #0a0a0a; 
+            color: #c0c0c0; 
+            font-family: 'Courier New', monospace; 
+            text-align: center;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><path fill="none" stroke="%23333" stroke-width="2" d="M 30,30 L 70,70 M 70,30 L 30,70"/><circle cx="50" cy="50" r="25" fill="none" stroke="%23333" stroke-width="2"/></svg>');
+            background-repeat: repeat;
+        }
+        .glow { text-shadow: 0 0 5px rgba(150, 150, 150, 0.7); }
+        .blink { animation: blink 3s steps(1, end) infinite; }
+        @keyframes blink { 70% { opacity: 0.3; } }
+        .container { width: 60%; margin: auto; border: 1px solid #333; padding: 20px; margin-top: 50px; background-color: rgba(0,0,0,0.7); display: block; }
+        #form1, #form2, #form3, #welcome { display: none; }
+        input, button { background-color: #222; color: #ccc; border: 1px solid #444; padding: 8px; margin: 5px; }
+        button { cursor: pointer; }
+    </style>
+</head>
+<body onload="showWelcome()">
+    <!-- WELCOME SCREEN -->
+    <div id="welcome" class="container">
+        <h1 class="glow">Welcome to the Brotherhood</h1>
+        <button onclick="showForm1()">ENTER</button>
+    </div>
+
+    <!-- FORM 1: PERSONAL DETAILS -->
+    <div id="form1" class="container">
+        <h2>Step 1: Your Identity</h2>
+        <input type="text" id="fullname" placeholder="Full Name"><br>
+        <input type="number" id="age" placeholder="Age"><br>
+        <select id="sex">
+            <option value="">Select Sex</option>
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+        </select><br>
+        <input type="text" id="country" placeholder="Country"><br>
+        <input type="text" id="state" placeholder="State"><br>
+        <button onclick="captureForm1()">ENTER</button>
+    </div>
+
+    <!-- FORM 2: UPLOAD IMAGES -->
+    <div id="form2" class="container">
+        <h2>Step 2: Proof of Commitment</h2>
+        <p>Upload three images.</p>
+        <input type="file" id="img1" accept="image/*"><br>
+        <input type="file" id="img2" accept="image/*"><br>
+        <input type="file" id="img3" accept="image/*"><br>
+        <button onclick="showForm3()">ENTER</button>
+    </div>
+
+    <!-- FORM 3: MEMBER ID -->
+    <div id="form3" class="container">
+        <h2>Step 3: Your Membership</h2>
+        <p id="memberID">MEMBER1-</p>
+        <button onclick="copyID()">COPY ID</button><br>
+        <button id="nextBtn" disabled onclick="showTelegram()">NEXT</button>
+    </div>
+
+    <!-- FINAL SCREEN: TELEGRAM -->
+    <div id="telegram" class="container" style="display:none;">
+        <h2>Initiation Complete</h2>
+        <p>Contact our handler on Telegram: <b>@GrandArbiterZalyth</b></p>
+        <p>Provide your Member ID. Await further instructions.</p>
+    </div>
+
+    <script>
+        let userData = {};
+        let memberCount = 1;
+
+        function showWelcome() { document.getElementById('welcome').style.display = 'block'; }
+        function showForm1() { document.getElementById('welcome').style.display = 'none'; document.getElementById('form1').style.display = 'block'; }
+        
+        function captureForm1() {
+            userData.fullname = document.getElementById('fullname').value;
+            userData.age = document.getElementById('age').value;
+            userData.sex = document.getElementById('sex').value;
+            userData.country = document.getElementById('country').value;
+            userData.state = document.getElementById('state').value;
+            document.getElementById('form1').style.display = 'none';
+            document.getElementById('form2').style.display = 'block';
+        }
+        
+        function showForm3() {
+            document.getElementById('form2').style.display = 'none';
+            document.getElementById('form3').style.display = 'block';
+            document.getElementById('memberID').innerText = "MEMBER" + (memberCount++) + "-" + userData.fullname.replace(/\s/g, '');
+        }
+        
+        function copyID() {
+            let text = document.getElementById('memberID').innerText;
+            navigator.clipboard.writeText(text);
+            document.getElementById('nextBtn').disabled = false;
+        }
+        
+        function showTelegram() {
+            document.getElementById('form3').style.display = 'none';
+            document.getElementById('telegram').style.display = 'block';
+        }
+    </script>
+</body>
+</html>
